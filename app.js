@@ -2,7 +2,8 @@ const disk = require('diskusage');
 const os = require('os');
 const osu = require('node-os-utils');
 var cpu = osu.cpu;
-
+const express = require('express');
+const app = express();
 const { Server } = require("socket.io");
 
 const io = new Server(3000, { cors: {    origin: "*"  } });
@@ -84,3 +85,12 @@ function cleanRam(){
 	});
 }
 checkServerStats();
+
+//Setup express server
+app.use(express.static('public'));
+app.listen(8080, () => {
+	console.log('Server started on port 8080');
+});
+app.get('/', (req, res) => {
+	res.sendFile(__dirname + '/public/index.html');
+});

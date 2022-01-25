@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Statistics</title>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js" integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H" crossorigin="anonymous"></script>
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: black;
+        }
+        .stat{
+            width: 100%;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 15px; 
+        }
+        #gradient-cpu-container {
+            /*Linear gradient for cpu monitoring*/
+            transition-duration: 1s;
+            background: #0074D9;
+            box-shadow: 0 0 50px #0074D9;
+            width: 0;
+            height: 15px;
+            position: relative;
+            border-radius: 150px;
+            
+        }
+        #gradient-ram-container {
+            /*Linear gradient for cpu monitoring*/
+            transition-duration: 1s;
+            background: #FF851B;
+            box-shadow: 0 0 50px #FF851B;
+            width: 0;
+            height: 15px;
+            position: relative;
+            border-radius: 150px;
+            
+        }
+        #gradient-ram-available-container {
+            /*Linear gradient for cpu monitoring*/
+            transition-duration: 1s;
+            background: #2ECC40;
+            box-shadow: 0 0 50px #2ECC40;
+            width: 0;
+            height: 15px;
+            position: relative;
+            border-radius: 150px;
+            
+        }
+        #gradient-disk-usage-container{
+            /*Linear gradient for cpu monitoring*/
+            transition-duration: 1s;
+            background: #3D9970;
+            box-shadow: 0 0 50px #3D9970;
+            width: 0;
+            height: 15px;
+            position: relative;
+            border-radius: 150px;
+        }
+        #gradient-disk-available-container{
+            /*Linear gradient for cpu monitoring*/
+            transition-duration: 1s;
+            background: #3D9970;
+            box-shadow: 0 0 50px #3D9970;
+            width: 0;
+            height: 15px;
+            position: relative;
+            border-radius: 150px;
+        }
+        .stat-container{
+            width: 100%;
+            height: fit-content;
+            background-color: #222;
+            border-radius: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stat">
+        <h1 style="color: white; margin-bottom: 25px; font-family: 'Roboto', sans-serif; font-size: 1.5em;">CPU Usage <a id="cpu-percentage" style="color: #0074D9;"> Loading... </a></h1>
+        <div class="stat-container">
+            <div id="gradient-cpu-container"></div>
+        </div>
+    </div>
+    <div class="stat">
+        <h1 style="color: white; margin-bottom: 25px; font-family: 'Roboto', sans-serif; font-size: 1.5em;">RAM Usage <a id="ram-percentage" style="color: #FF851B;"> Loading... </a></h1>
+        <div class="stat-container">
+            <div id="gradient-ram-container"></div>
+        </div>
+    </div>
+    <div class="stat">
+        <h1 style="color: white; margin-bottom: 25px; font-family: 'Roboto', sans-serif; font-size: 1.5em;">RAM Available <a id="ram-available-percentage" style="color: #2ECC40;"> Loading... </a></h1>
+        <div class="stat-container">
+            <div id="gradient-ram-available-container"></div>
+        </div>
+    </div>
+    <div class="stat">
+        <h1 style="color: white; margin-bottom: 25px; font-family: 'Roboto', sans-serif; font-size: 1.5em;">Disk Usage <a id="disk-usage-percentage" style="color: #3D9970;"> Loading... </a></h1>
+        <div class="stat-container">
+            <div id="gradient-disk-usage-container"></div>
+        </div>
+    </div>
+    <div class="stat">
+        <h1 style="color: white; margin-bottom: 25px; font-family: 'Roboto', sans-serif; font-size: 1.5em;">Disk Available <a id="disk-available-percentage" style="color: #2ECC40;"> Loading... </a></h1>
+        <div class="stat-container">
+            <div id="gradient-disk-available-container"></div>
+        </div>
+    </div>
+    <script>
+        const socket = io('http://localhost:3000');
+
+        socket.on('connect', function() {
+            console.log('Connected to server');
+        });
+
+        socket.on('disconnect', function() {
+            console.log('Disconnected from server');
+        });
+
+        socket.on('stats', function(data) {
+            console.log(data);
+            document.getElementById('gradient-cpu-container').style.width = data.cpu;
+            document.getElementById('cpu-percentage').innerHTML = data.cpu;
+
+            document.getElementById('gradient-ram-container').style.width = data.ram.percentageUsed;
+            document.getElementById('ram-percentage').innerHTML = `${data.ram.percentageUsed} (${data.ram.formattedUsed})`;
+
+            document.getElementById('gradient-ram-available-container').style.width = data.ram.percentageAvailable;
+            document.getElementById('ram-available-percentage').innerHTML = `${data.ram.percentageAvailable} (${data.ram.formattedFree})`;
+
+            document.getElementById('gradient-disk-usage-container').style.width = data.disk.percentageUsed;
+            document.getElementById('disk-usage-percentage').innerHTML = `${data.disk.percentageUsed} (${data.disk.formattedUsed})`;
+
+            document.getElementById('gradient-disk-available-container').style.width = data.disk.percentageFree;
+            document.getElementById('disk-available-percentage').innerHTML = `${data.disk.percentageFree} (${data.disk.formattedFree})`;
+        });
+
+        function freeRam() {
+            socket.emit('freeRam');
+        }
+
+    </script>
+</body>
+</html>

@@ -128,7 +128,6 @@
         });
 
         socket.on('stats', function(data) {
-            console.log(data);
             document.getElementById('gradient-cpu-container').style.width = data.cpu;
             document.getElementById('cpu-percentage').innerHTML = data.cpu;
 

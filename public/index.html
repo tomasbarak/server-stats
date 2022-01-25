@@ -93,7 +93,7 @@
         </div>
     </div>
     <div class="stat">
-        <h1 style="color: white; margin-bottom: 25px; font-family: 'Roboto', sans-serif; font-size: 1.5em;">RAM Usage <a id="ram-percentage" style="color: #FF851B;"> Loading... </a></h1>
+        <h1 style="color: white; margin-bottom: 25px; font-family: 'Roboto', sans-serif; font-size: 1.5em;">RAM Usage <a id="ram-percentage" style="color: #FF851B;"> Loading... </a><a style="background-color: #FF851B; margin: 0 15px; box-sizing: border-box; padding: 8px; border-radius: 50px; font-size: 0.75em; box-shadow:0 0 15px #FF851B; cursor: pointer;" onclick="freeRam()">Free Up</a></h1>
         <div class="stat-container">
             <div id="gradient-ram-container"></div>
         </div>
@@ -146,6 +146,7 @@
 
         function freeRam() {
             socket.emit('freeRam');
+            console.log('Freeing ram');
         }
 
     </script>

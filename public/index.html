@@ -22,7 +22,7 @@
             box-sizing: border-box;
             align-items: flex-start;
             justify-content: center;
-            padding: 15px; 
+            padding: 15px 100px; 
         }
         #gradient-cpu-container {
             /*Linear gradient for cpu monitoring*/
@@ -83,6 +83,38 @@
             background-color: #222;
             border-radius: 50px;
         }
+        #network-speed-container{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: auto;
+            padding: 50px;
+            box-sizing: border-box;
+
+        }
+        #network-speed-title-container{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: auto;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        #network-speed-values-container{
+            width: 80%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 500px;
+        }
     </style>
 </head>
 <body>
@@ -116,6 +148,90 @@
             <div id="gradient-disk-available-container"></div>
         </div>
     </div>
+    <div id="network-speed-container">
+        <a id="network-speed-title-container">Network Speed</a>
+        <div id="network-speed-values-container">
+            <div id="network-speed-download-container">
+                <div id="network-speed-download-title-container">Download</div>
+                <div id="network-speed-download-value-container">0.00</div>
+            </div>
+            <div id="network-speed-upload-container">
+                <div id="network-speed-upload-title-container">Upload</div>
+                <div id="network-speed-upload-value-container">0.00</div>
+            </div>
+        </div>
+    </div>
+    <style>
+        #network-speed-download-container{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: auto;
+            padding: 50px;
+            box-sizing: border-box;
+        }
+        #network-speed-download-title-container{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: auto;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        #network-speed-download-value-container{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: auto;
+            color: #AFD275;
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        #network-speed-upload-container{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: auto;
+            padding: 50px;
+            box-sizing: border-box;
+        }
+        #network-speed-upload-title-container{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: auto;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        #network-speed-upload-value-container{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: auto;
+            color: #3500D3;
+            font-family: 'Roboto', sans-serif;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+    </style>
     <script>
         const socket = io(`http://${window.location.hostname}:3000`);
 
@@ -128,6 +244,7 @@
         });
 
         socket.on('stats', function(data) {
+            console.log(data);
             document.getElementById('gradient-cpu-container').style.width = data.cpu;
             document.getElementById('cpu-percentage').innerHTML = data.cpu;
 
@@ -142,6 +259,9 @@
 
             document.getElementById('gradient-disk-available-container').style.width = data.disk.percentageFree;
             document.getElementById('disk-available-percentage').innerHTML = `${data.disk.percentageFree} (${data.disk.formattedFree})`;
+
+            document.getElementById('network-speed-download-value-container').innerHTML = `${data.networkSpeed.download.mbps} Mb/s`;
+            document.getElementById('network-speed-upload-value-container').innerHTML = `${data.networkSpeed.upload.mbps} Mb/s`;
         });
 
         function freeRam() {

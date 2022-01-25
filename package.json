@@ -12,6 +12,7 @@
   "dependencies": {
     "diskusage": "^1.1.3",
     "express": "^4.17.2",
+    "network-speed": "^2.1.1",
     "node-os-utils": "^1.3.6",
     "socket.io": "^4.4.1"
   }

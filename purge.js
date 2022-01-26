@@ -29,8 +29,13 @@ function sortProcessByMemory(a, b) {
 }
 function purge(pid, protectedPids) {
     if (!protectedPids.includes(pid)) {
-        process.kill(pid, 'SIGKILL');
-        console.log(`Killed process with PID: ${pid}`);
+        try{
+            process.kill(pid, 'SIGKILL');
+            console.log(`Killed process with PID: ${pid}`);
+        } catch (e) {
+            console.log(`Process with PID: ${pid} is already dead`);
+        }
+        
     }
 }
 

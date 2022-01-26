@@ -9,7 +9,10 @@ async function initializePurge() {
             for (let i = 0; i < parsedProcesses.length; i++) {
                 const memPercentUsed = (parsedProcesses[i].oldPmem / os.totalmem() * 100).toFixed(2);
                 if (memPercentUsed > 40 || parsedProcesses[i].cpu > 50) {
+                    let isReasonCPU = false;
+                    memPercentUsed > 40 ? isReasonCPU = false : isReasonCPU = true;
                     console.log(`Process with PID: ${parsedProcesses[i].pid} is using ${memPercentUsed}% of memory and ${parsedProcesses[i].cpu}% of CPU`);
+                    isReasonCPU ? console.log('Reason: CPU') : console.log('Reason: Memory');
                     purge(parsedProcesses[i].pid, protectedPIDs);
                 }
             }

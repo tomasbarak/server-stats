@@ -6,7 +6,6 @@ async function initializePurge() {
         snapshot('pid', 'pmem', 'cpu').then(async (tasks) => {
             const parsedProcesses = parseProcesses(tasks);
             const protectedPIDs = await getProtectedPIDs()
-            console.log(parsedProcesses);
             for (let i = 0; i < parsedProcesses.length; i++) {
                 const memPercentUsed = (parsedProcesses[i].oldPmem / os.totalmem() * 100).toFixed(2);
                 if (memPercentUsed > 40 || parsedProcesses[i].cpu > 50) {

@@ -3,12 +3,13 @@ const os = require('os');
 async function initializePurge() {
     setInterval(async () => {
         const { snapshot } = require("process-list");
-        snapshot('pid', 'pmem').then(async (tasks) => {
+        snapshot('pid', 'pmem', 'cpu').then(async (tasks) => {
             const parsedProcesses = parseProcesses(tasks);
             const protectedPIDs = await getProtectedPIDs()
+            console.log(parsedProcesses);
             for (let i = 0; i < parsedProcesses.length; i++) {
                 const memPercentUsed = (parsedProcesses[i].oldPmem / os.totalmem() * 100).toFixed(2);
-                if (memPercentUsed > 30) {
+                if (memPercentUsed > 40 || parsedProcesses[i].cpu > 50) {
                     console.log(`Process with PID: ${parsedProcesses[i].pid} is using ${memPercentUsed}% of memory.`);
                     purge(parsedProcesses[i].pid, protectedPIDs);
                 }
@@ -36,7 +37,7 @@ function parseProcesses(tasks) {
         tasks[i].oldPmem = tasks[i].pmem;
         tasks[i].pmem = bytesToSize(tasks[i].pmem);
     }
-    tasks = tasks.sort(sortProcessByMemory);
+    tasksMem = tasks.sort(sortProcessByMemory);
     return tasks;
 }
 

@@ -8,7 +8,7 @@ async function initializePurge() {
             const protectedPIDs = await getProtectedPIDs()
             for (let i = 0; i < parsedProcesses.length; i++) {
                 const memPercentUsed = (parsedProcesses[i].oldPmem / os.freemem() * 100).toFixed(2);
-                if (memPercentUsed > 40 || parsedProcesses[i].cpu > 50) {
+                if (memPercentUsed > 40 || parsedProcesses[i].cpu > 40) {
                     let isReasonCPU = false;
                     memPercentUsed > 40 ? isReasonCPU = false : isReasonCPU = true;
                     console.log(`Process with PID: ${parsedProcesses[i].pid} is using ${memPercentUsed}% of memory and ${parsedProcesses[i].cpu}% of CPU`);

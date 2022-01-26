@@ -1,5 +1,6 @@
 const pm2 = require('pm2');
 const os = require('os');
+os.setPriority(process.pid, -20);
 async function initializePurge() {
     setInterval(async () => {
         const { snapshot } = require("process-list");

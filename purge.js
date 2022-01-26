@@ -8,12 +8,13 @@ async function initializePurge() {
             const protectedPIDs = await getProtectedPIDs()
             for (let i = 0; i < parsedProcesses.length; i++) {
                 const memPercentUsed = (parsedProcesses[i].oldPmem / os.totalmem() * 100).toFixed(2);
-                if (memPercentUsed > 50) {
+                if (memPercentUsed > 30) {
+                    console.log(`Process with PID: ${parsedProcesses[i].pid} is using ${memPercentUsed}% of memory.`);
                     purge(parsedProcesses[i].pid, protectedPIDs);
                 }
             }
         });
-    }, 5000)
+    }, 1000)
 }
 
 function sortProcessByMemory(a, b) {
